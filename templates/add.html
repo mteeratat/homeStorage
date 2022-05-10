@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Add{% endblock %}
+{% block content %}
+    <form action="/add" method="post">
+        <input type="text" placeholder="name" name='name'>
+        <input type="number" placeholder="amount" name="num">
+        <button type="submit">Add</button>
+    </form>
+    {{ res }}
+{% endblock %}

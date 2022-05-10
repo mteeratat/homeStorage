@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+    <h1>Found</h1> 
+    <!-- <h1>{{ name }}</h1> -->
+    {% for r in name %}
+        <h1>{{ r }}</h1>
+    {% endfor %}
+{% endblock %}

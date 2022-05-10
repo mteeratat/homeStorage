@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %} {% endblock %} - FlaskApp</title>
+    <title>{% block title %}{% endblock %} - Home Storage</title>
 </head>
 <body>
     <nav>
-        <a href="{{ url_for('index') }}">FlaskApp</a>
+        <a href="{{ url_for('index') }}">Search</a>
+        <a href="{{ url_for('add') }}">Add</a>
         <a href="#">About</a>
     </nav>
     <hr>
     <div class="content">
-        {% block content %} {% endblock %}
+        {% block content %}{% endblock %}
     </div>
 </body>
 </html>
