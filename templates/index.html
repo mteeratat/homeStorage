@@ -5,4 +5,11 @@
         <input type="text" placeholder="name" name='name'>
         <button type="submit">Search</button>
     </form>
+    {% for r in res %}
+    <div style="display: flex">
+        <h1>{{ r['name'] }} : {{ r['amount'] }}</h1>
+        <button>Delete</button>
+    </div>
+    <br>
+    {% endfor %}
 {% endblock %}

@@ -11,13 +11,15 @@ fridge = homeStorage.fridge
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    response = fridge.find()
+    res = [r for r in response]
+    return render_template('index.html', res=res)
 
 @app.route('/search', methods=['GET'])
 def search():
     response = fridge.find({'name': request.args.get('name')})
-    res = [r['name'] for r in response]
-    return render_template('search.html', name=res)
+    res = [r for r in response]
+    return render_template('search.html', res=res)
 
 @app.route('/add', methods=['GET','POST'])
 def add():
@@ -25,7 +27,6 @@ def add():
     if request.method == 'POST':
         print('x')
         x = fridge.insert_one({'name': request.form['name'], 'amount': request.form['num']})
-        # print(x.acknowledged)
         if x.acknowledged:
             res = "Add complete"
         else: 

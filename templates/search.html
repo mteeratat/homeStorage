@@ -2,8 +2,10 @@
 {% block title %}Search{% endblock %}
 {% block content %}
     <h1>Found</h1> 
-    <!-- <h1>{{ name }}</h1> -->
-    {% for r in name %}
-        <h1>{{ r }}</h1>
+    {% for r in res %}
+    <div style="display: flex">
+        <h1>{{ r['name'] }} : {{ r['amount'] }}</h1>
+        <button>Delete</button>
+    </div>
     {% endfor %}
 {% endblock %}
