@@ -5,10 +5,21 @@
         <input type="text" placeholder="name" name='name'>
         <button type="submit">Search</button>
     </form>
-    {% for r in res %}
+    {% for i in range(res|count) %}
     <div style="display: flex">
-        <h1>{{ r['name'] }} : {{ r['amount'] }}</h1>
-        <button>Delete</button>
+        <h1>{{ res[i]['name'] }} : {{ res[i]['amount'] }}</h1>
+        <form action="/" method="post">
+            <input type="hidden" name="increase" value="{{ res[i]['name']+'-'+res[i]['amount'] }}">
+            <button type="submit">Increase</button>
+        </form>
+        <form action="/" method="post">
+            <input type="hidden" name="decrease" value="{{ res[i]['name']+'-'+res[i]['amount'] }}">
+            <button type="submit">Decrease</button>
+        </form>
+        <form action="/" method="post">
+            <input type="hidden" name="delete" value="{{ res[i]['name']+'-'+res[i]['amount'] }}">
+            <button type="submit">Delete</button>
+        </form>
     </div>
     <br>
     {% endfor %}

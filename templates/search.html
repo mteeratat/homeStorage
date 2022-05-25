@@ -1,11 +1,29 @@
 {% extends "base.html" %}
 {% block title %}Search{% endblock %}
 {% block content %}
-    <h1>Found</h1> 
-    {% for r in res %}
+    <!-- <form action="/search" method="post">
+        <input type="hidden" name="name" value="{{ name }}">
+    </form> -->
+    <h1>Found !</h1> 
+    {% for i in range(res|count) %}
     <div style="display: flex">
-        <h1>{{ r['name'] }} : {{ r['amount'] }}</h1>
-        <button>Delete</button>
+        <h1>{{ res[i]['name'] }} : {{ res[i]['amount'] }}</h1>
+        <form action="/search" method="post">
+            <input type="hidden" name="increase" value="{{ res[i]['name']+'-'+res[i]['amount'] }}">
+            <input type="hidden" name="name" value="{{ name }}">
+            <button type="submit">Increase</button>
+        </form>
+        <form action="/search" method="post">
+            <input type="hidden" name="decrease" value="{{ res[i]['name']+'-'+res[i]['amount'] }}">
+            <input type="hidden" name="name" value="{{ name }}">
+            <button type="submit">Decrease</button>
+        </form>
+        <form action="/search" method="post">
+            <input type="hidden" name="delete" value="{{ res[i]['name']+'-'+res[i]['amount'] }}">
+            <input type="hidden" name="name" value="{{ name }}">
+            <button type="submit">Delete</button>
+        </form>
     </div>
+    <br>
     {% endfor %}
 {% endblock %}

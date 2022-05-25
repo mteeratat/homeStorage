@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, redirect, render_template, request, jsonify, url_for
 import pymongo
 import os
+import json
 
 app = Flask(__name__)
 link = "mongodb+srv://"+os.environ['dbuser']+":"+os.environ['dbpass']+"@cluster0.zltoe.mongodb.net/homeStorage?retryWrites=true&w=majority"
@@ -9,17 +10,63 @@ client = pymongo.MongoClient(link)
 homeStorage = client.homeStorage
 fridge = homeStorage.fridge
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET','POST'])
 def index():
+    if request.method == 'POST':
+        if request.form.get('increase') != None:
+            temp = request.form.get('increase')
+            temp2 = temp.split('-')
+            amount = str(int(temp2[1]) + 1)
+            r = fridge.update_one(filter={'name': temp2[0], 'amount': temp2[1]}, update={'$set': {'name': temp2[0], 'amount': amount}})
+            print(r.raw_result)
+        elif request.form.get('decrease') != None:
+            temp = request.form.get('decrease')
+            temp2 = temp.split('-')
+            amount = str(int(temp2[1]) - 1)
+            r = fridge.update_one(filter={'name': temp2[0], 'amount': temp2[1]}, update={'$set': {'name': temp2[0], 'amount': amount}})
+            print(r.raw_result)
+        elif request.form.get('delete') != None:
+            temp = request.form.get('delete')
+            temp2 = temp.split('-')
+            r = fridge.delete_one({'name': temp2[0], 'amount': temp2[1]})
+            print(r.raw_result)
+        return redirect(url_for('index'))
     response = fridge.find()
     res = [r for r in response]
     return render_template('index.html', res=res)
 
-@app.route('/search', methods=['GET'])
+@app.route('/search', methods=['GET','POST'])
 def search():
-    response = fridge.find({'name': request.args.get('name')})
+    if request.method == 'POST':
+        print(request.form)
+        if request.form.get('increase') != None:
+            temp = request.form.get('increase')
+            temp2 = temp.split('-')
+            amount = str(int(temp2[1]) + 1)
+            r = fridge.update_one(filter={'name': temp2[0], 'amount': temp2[1]}, update={'$set': {'name': temp2[0], 'amount': amount}})
+            print(r.raw_result)
+        elif request.form.get('decrease') != None:
+            temp = request.form.get('decrease')
+            temp2 = temp.split('-')
+            amount = str(int(temp2[1]) - 1)
+            r = fridge.update_one(filter={'name': temp2[0], 'amount': temp2[1]}, update={'$set': {'name': temp2[0], 'amount': amount}})
+            print(r.raw_result)
+        elif request.form.get('delete') != None:
+            temp = request.form.get('delete')
+            temp2 = temp.split('-')
+            r = fridge.delete_one({'name': temp2[0], 'amount': temp2[1]})
+            print(r.raw_result)
+        # return redirect(url_for('search'))
+        name = request.form.get('name')
+        response = fridge.find(filter={'name': {"$regex": '.*'+name+'.*'}})
+        res = [r for r in response]
+        return render_template('search.html', res=res, name=name)
+
+    name = request.args.get('name')
+    # response = fridge.find(filter={'name': request.args.get('name')})
+    response = fridge.find(filter={'name': {"$regex": '.*'+name+'.*'}})
     res = [r for r in response]
-    return render_template('search.html', res=res)
+    return render_template('search.html', res=res, name=name)
 
 @app.route('/add', methods=['GET','POST'])
 def add():
@@ -32,6 +79,12 @@ def add():
         else: 
             res = "Incomplete"
     return render_template('add.html', res=res)
+
+# @app.route('/search', methods=['DELETE'])
+# def search():
+#     response = fridge.find({'name': request.args.get('name')})
+#     res = [r for r in response]
+#     return render_template('search.html', res=res)
 
 # @app.route('/get', methods=['GET'])
 # def hello_world2():
