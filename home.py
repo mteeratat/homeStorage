@@ -2,10 +2,13 @@ from flask import Flask, redirect, render_template, request, jsonify, url_for
 import pymongo
 import os
 import json
+from datetime import datetime
+import requests
 
 app = Flask(__name__)
 link = "mongodb+srv://"+os.environ['dbuser']+":"+os.environ['dbpass']+"@cluster0.zltoe.mongodb.net/homeStorage?retryWrites=true&w=majority"
 client = pymongo.MongoClient(link)
+linetoken = os.environ['linetoken']
 
 homeStorage = client.homeStorage
 fridge = homeStorage.fridge
@@ -73,12 +76,36 @@ def add():
     res = ""
     if request.method == 'POST':
         print('x')
-        x = fridge.insert_one({'name': request.form['name'], 'amount': request.form['num']})
+        x = fridge.insert_one({'name': request.form['name'], 'amount': request.form['num'], 'expired': request.form['expired']})
         if x.acknowledged:
             res = "Add complete"
         else: 
             res = "Incomplete"
     return render_template('add.html', res=res)
+
+@app.route('/expired', methods=['GET'])
+def expired():
+    response = fridge.find()
+    res = [r for r in response]
+    res2 = []
+    for r in res:
+        datetime_object = datetime.strptime(r['expired'], '%Y-%m-%d')
+        if datetime.today() >= datetime_object:
+            res2.append(r)
+
+    if request.args.get('expired') == '1':
+        url = 'https://notify-api.line.me/api/notify'
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer '+linetoken
+        }
+        message = ['\n'+r['name']+' : '+r['amount']+' : '+r['expired'] for r in res2]
+        print(message)
+        data = {
+            'message': message
+        }
+        x = requests.post(url=url, headers=headers, data=data)
+    return render_template('expired.html', res=res2)
 
 # @app.route('/search', methods=['DELETE'])
 # def search():

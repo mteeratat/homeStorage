@@ -7,7 +7,7 @@
     </form>
     {% for i in range(res|count) %}
     <div style="display: flex">
-        <h1>{{ res[i]['name'] }} : {{ res[i]['amount'] }}</h1>
+        <h1>{{ res[i]['name'] }} : {{ res[i]['amount'] }} : {{ res[i]['expired'] }}</h1>
         <form action="/" method="post">
             <input type="hidden" name="increase" value="{{ res[i]['name']+'-'+res[i]['amount'] }}">
             <button type="submit">Increase</button>

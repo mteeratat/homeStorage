@@ -1,7 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Search{% endblock %}
+{% block title %}Expired{% endblock %}
 {% block content %}
-    <h1>Found !</h1> 
+    <div style="display: flex">
+        <h1>Expired !</h1> 
+        <form action="/expired" method="get">
+            <input type="submit" name="expired" value="1">
+        </form>
+    </div>
     {% for i in range(res|count) %}
     <div style="display: flex">
         <h1>{{ res[i]['name'] }} : {{ res[i]['amount'] }} : {{ res[i]['expired'] }}</h1>

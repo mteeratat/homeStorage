@@ -4,6 +4,8 @@
     <form action="/add" method="post">
         <input type="text" placeholder="name" name='name' required>
         <input type="number" placeholder="amount" name="num" required>
+        <label for="expired">Expiration date</label>
+        <input type="date" id="expired" name="expired" required>
         <button type="submit">Add</button>
     </form>
     {{ res }}
