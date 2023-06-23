@@ -8,4 +8,4 @@ Develop web application for my home storage(refrigerator) because mine has too m
 
 - Using **MongoDB atlas** to store data
 
-- Deployed on **Google Cloud Platform (Cloud Run)** https://homestorage-bdavkzxjma-de.a.run.app
+- Deployed on ~Heroku~ **Google Cloud Platform (Cloud Run)** https://homestorage-bdavkzxjma-de.a.run.app
