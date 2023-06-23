@@ -93,7 +93,7 @@ def expired():
         if datetime.today() >= datetime_object:
             res2.append(r)
 
-    if request.args.get('expired') == '1':
+    if request.args.get('expired') == 'send notification':
         url = 'https://notify-api.line.me/api/notify'
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
